@@ -33,6 +33,7 @@ bootJar {
 
 // tag::task[]
 docker {
+	println System.getenv( 'DOCKER_HOST' )
     dependsOn build
     name "sibendudas/${bootJar.baseName}"
     files bootJar.archivePath
