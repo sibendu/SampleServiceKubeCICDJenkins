@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+      maven {
+        url "https://plugins.gradle.org/m2/"
+      }
+      mavenCentral()
+    }
+    dependencies {
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE')
+// tag::build[]
+        classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0')
+// end::build[]
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+// tag::plugin[]
+apply plugin: 'com.palantir.docker'
+apply plugin: 'com.palantir.docker-run'
+// end::plugin[]
+
+// This is used as the docker image prefix (org)
+group = 'springio'
+
+bootJar {
+    baseName = 'gs-spring-boot-docker'
+    version =  '0.1.0'
+}
+
+// tag::task[]
+docker {
+    dependsOn build
+    name "sibendudas/${bootJar.baseName}"
+    files bootJar.archivePath
+    buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
+}
+// end::task[]
+
+
+dockerRun {
+    name "${bootJar.baseName}"
+    image "sibendudas/${bootJar.baseName}"
+    ports "7080:8080"
+    daemonize true
+    env 'MYVAR1': 'MYVALUE1', 'MYVAR2': 'MYVALUE2'
+    command 'sleep', '100'
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web") 
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}
+
