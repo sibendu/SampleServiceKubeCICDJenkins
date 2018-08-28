@@ -31,20 +31,23 @@ bootJar {
     version =  '0.1.0'
 }
 
-task testTask {
-    println 'Welcome in the Sibendu!'
-    println System.getProperty("DOCKER_HOST")
-}
-
 // tag::task[]
 docker {
-	println System.getProperty("DOCKER_MACHINE_NAME")
+
+	systemProperty “DOCKER_CERT_PATH”, "%USERPROFILE%\.docker\machine\machines\default"
+	systemProperty “DOCKER_HOST”, "tcp://192.168.99.100:2376"
+	systemProperty “DOCKER_MACHINE_NAME”, "default"
+	systemProperty “DOCKER_TLS_VERIFY”, "1"
+
+	println System.getProperty("DOCKER_CERT_PATH")
+	println System.getProperty("DOCKER_HOST")
+	
     dependsOn build
     name "sibendudas/${bootJar.baseName}"
     files bootJar.archivePath
     buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
 }
-// end::task[]
+// end::task[]  
 
 
 dockerRun {
