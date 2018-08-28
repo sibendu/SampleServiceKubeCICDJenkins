@@ -33,12 +33,12 @@ bootJar {
 
 task testTask {
     println 'Welcome in the Sibendu!'
-    println System.getenv( 'DOCKER_HOST' )
+    println System.getProperty("DOCKER_HOST")
 }
 
 // tag::task[]
 docker {
-	
+	println System.getProperty("DOCKER_MACHINE_NAME")
     dependsOn build
     name "sibendudas/${bootJar.baseName}"
     files bootJar.archivePath
