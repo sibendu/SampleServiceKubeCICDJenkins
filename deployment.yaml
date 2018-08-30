@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gs-spring-boot-docker
+  labels:
+    app: gs-spring-boot-docker
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: gs-spring-boot-docker
+    tier: gs-spring-boot-docker
+  type: NodePort
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gs-spring-boot-docker
+  labels:
+    app: gs-spring-boot-docker
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: gs-spring-boot-docker
+        tier: gs-spring-boot-docker
+    spec:
+      containers:
+      - image: sibendudas/gs-spring-boot-docker
+        name: gs-spring-boot-docker
+        ports:
+        - containerPort: 8080
+          name: gs-spring-boot-docker
