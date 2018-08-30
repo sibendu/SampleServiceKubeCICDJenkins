@@ -1,37 +1,37 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: gs-spring-boot-docker
+  name: SampleService
   labels: 
-    app: gs-spring-boot-docker
+    app: SampleService
 spec:
   ports:
     - port: 8080
       targetPort: 8080
   selector:
-    app: gs-spring-boot-docker
-    tier: gs-spring-boot-docker
+    app: SampleService
+    tier: SampleService
   type: NodePort
 
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: gs-spring-boot-docker
+  name: SampleService
   labels:
-    app: gs-spring-boot-docker
+    app: SampleService
 spec:
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: gs-spring-boot-docker
-        tier: gs-spring-boot-docker
+        app: SampleService
+        tier: SampleService
     spec:
       containers:
       - image: sibendudas/gs-spring-boot-docker
-        name: gs-spring-boot-docker
+        name: SampleService
         ports:
         - containerPort: 8080
-          name: gs-spring-boot-docker
+          name: SampleService
